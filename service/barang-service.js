@@ -28,30 +28,38 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  const { nama, satuan, kategori, status, harga } = req.body;
+  const { kode, nama, jumlah, satuan, kategori, status, harga } = req.body;
   const sql =
-    "INSERT INTO barang (nama, satuan, kategori, status, harga) VALUES (?, ?, ?, ?, ?)";
-  db.query(sql, [nama, satuan, kategori, status, harga], (err, result) => {
-    if (err) {
-      res.status(500).send({ error: "Terjadi kesalahan server" });
-    } else {
-      res.send({ message: "Berhasil menambah barang" });
+    "INSERT INTO barang (kode, nama, jumlah, satuan, kategori, status, harga) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  db.query(
+    sql,
+    [kode, nama, jumlah, satuan, kategori, status, harga],
+    (err, result) => {
+      if (err) {
+        res.status(500).send({ error: "Terjadi kesalahan server" });
+      } else {
+        res.send({ message: "Berhasil menambah barang" });
+      }
     }
-  });
+  );
 });
 
 router.put("/:id", (req, res) => {
   const id = req.params.id;
-  const { nama, satuan, kategori, status, harga } = req.body;
+  const { kode, nama, jumlah, satuan, kategori, status, harga } = req.body;
   const sql =
-    "UPDATE barang SET nama = ?, satuan = ?, kategori = ?, status = ?, harga = ? WHERE id = ?";
-  db.query(sql, [nama, satuan, kategori, status, harga, id], (err, result) => {
-    if (err) {
-      res.status(500).send({ error: "Terjadi kesalahan server" });
-    } else {
-      res.send({ message: "Data barang berhasil diupdate" });
+    "UPDATE barang SET kode = ?, nama = ?, jumlah = ?, satuan = ?, kategori = ?, status = ?, harga = ? WHERE id = ?";
+  db.query(
+    sql,
+    [kode, nama, jumlah, satuan, kategori, status, harga],
+    (err, result) => {
+      if (err) {
+        res.status(500).send({ error: "Terjadi kesalahan server" });
+      } else {
+        res.send({ message: "Data barang berhasil diupdate" });
+      }
     }
-  });
+  );
 });
 
 router.delete("/:id", (req, res) => {
