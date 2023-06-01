@@ -15,6 +15,18 @@ router.get("/", (req, res) => {
   });
 });
 
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = "SELECT * FROM barang WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      res.status(500).send({ error: "Terjadi kesalahan server" });
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 router.post("/", (req, res) => {
   const { nama, satuan, kategori, status, harga } = req.body;
   const sql =
