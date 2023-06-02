@@ -1,29 +1,21 @@
-# Gunakan base image PHP yang diinginkan
+# Menggunakan gambar resmi PHP dengan Apache
 FROM php:7.4-apache
 
-# Setel direktori kerja ke direktori root aplikasi
-WORKDIR /var/www/html
+# Menyalin konten proyek ke direktori kerja di dalam kontainer
+COPY . /var/www/html
 
-# Salin file aplikasi ke dalam kontainer
-COPY . .
+# Memperbarui paket yang ada dan menginstal dependensi yang diperlukan
+RUN apt-get update \
+    && apt-get install -y \
+        git \
+        unzip
 
-# Instal dependensi yang dibutuhkan
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
-
-# Instal composer
+# Menjalankan perintah untuk menginstal dependensi PHP yang diperlukan (misalnya, jika menggunakan Composer)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install --optimize-autoloader --no-dev
 
-# Install dependensi PHP menggunakan composer
-RUN composer install --no-dev --optimize-autoloader
-
-# Konfigurasi Apache
+# Menjalankan perintah untuk menyiapkan konfigurasi Apache
 RUN a2enmod rewrite
 
-# Expose port 80
-EXPOSE 8080
-
-# Setel command yang akan dijalankan saat kontainer berjalan
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+# Menjalankan Apache ketika kontainer dimulai
+CMD apache2-foreground
