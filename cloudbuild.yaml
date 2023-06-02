@@ -23,7 +23,7 @@ steps:
     args:
       - "run"
       - "deploy"
-      - "your-service-name"
+      - "final-project-tcc"
       - "--image"
       - "gcr.io/praktikum-tcc-133/project-akhir"
       - "--region"
