@@ -17,7 +17,7 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 WORKDIR /var/www/html
 
 # Mengexpose port 80 (port default Apache)
-EXPOSE 80
+EXPOSE 8080
 
 # Menjalankan perintah untuk menjalankan server Apache saat container dijalankan
 CMD ["apache2-foreground"]
