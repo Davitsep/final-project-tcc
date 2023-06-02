@@ -1,36 +1,18 @@
 steps:
-  # Langkah 1: Checkout kode sumber dari repositori
-  - name: "gcr.io/cloud-builders/git"
-    args: ["clone", "https://github.com/Davitsep/final-project-tcc.git"]
-
-  # Langkah 2: Bangun kontainer Docker
+  # Build the Docker image
   - name: "gcr.io/cloud-builders/docker"
-    args:
-      - "build"
-      - "-t"
-      - "gcr.io/praktikum-tcc-133/project-akhir"
-      - "final-project-tcc/frontend" # Path ke direktori kode sumber Anda
+    args: ["build", "-t", "gcr.io/praktikum-tcc-133/my-php-app", "."]
 
-  # Langkah 3: Unggah kontainer Docker ke Container Registry
+  # Push the Docker image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args:
-      - "push"
-      - "gcr.io/praktikum-tcc-133/project-akhir"
+    args: ["push", "gcr.io/praktikum-tcc-133/my-php-app"]
 
-  # Langkah 4: Deploy kontainer ke Cloud Run
+  # Deploy the image to Cloud Run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: "gcloud"
     args:
       - "run"
       - "deploy"
-      - "final-project-tcc"
-      - "--image"
-      - "gcr.io/praktikum-tcc-133/project-akhir"
-      - "--region"
-      - "us-central1" # Ganti dengan region yang diinginkan
-      - "--platform"
-      - "managed"
-      - "--allow-unauthenticated" # Hapus baris ini jika memerlukan otentikasi
-
-timeout: "600s" # Ubah sesuai kebutuhan
-
+      - "my-php-app"
+      - "--image=gcr.io/praktikum-tcc-133/my-php-app"
+      - "--platform=managed"
+      - "--region=us-central1"
