@@ -30,35 +30,64 @@ if ($_GET["op"] == "tambah") {
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
     $response = curl_exec($ch);
-    $result = json_decode($response, true);
+
+    if ($response === false) {
+        echo "Gagal mengirim permintaan ke API: " . curl_error($ch);
+        exit;
+    }
+
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
+
+    if ($httpCode == 201) {
+        header("Location: ../inventaris.php");
+        exit;
+    } else {
+        echo "Gagal memproses permintaan: " . $httpCode;
+        exit;
+    }
 } elseif ($_GET["op"] == "edit") {
-    $id = $_GET["id"];
-    $data = array(
-        "kode" => $kode_barang,
-        "nama" => $nama_barang,
-        "jumlah" => $jumlah,
-        "satuan" => $satuan,
-        "kategori" => $kategori,
-        "status" => $status,
-        "harga" => $harga
-    );
+    if (isset($_GET["id"])) {
+        $id = $_GET["id"];
+        $data = array(
+            "kode" => $kode_barang,
+            "nama" => $nama_barang,
+            "jumlah" => $jumlah,
+            "satuan" => $satuan,
+            "kategori" => $kategori,
+            "status" => $status,
+            "harga" => $harga
+        );
 
-    $url = "https://project-akhir-g2wmaqjniq-uc.a.run.app/barang/$id";
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    $response = curl_exec($ch);
-    $result = json_decode($response, true);
-    curl_close($ch);
-}
+        $url = "https://project-akhir-g2wmaqjniq-uc.a.run.app/barang/$id";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        $response = curl_exec($ch);
 
-if ($result) {
-    header("Location: ../inventaris.php");
-    exit;
+        if ($response === false) {
+            echo "Gagal mengirim permintaan ke API: " . curl_error($ch);
+            exit;
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode == 200) {
+            header("Location: ../inventaris.php");
+            exit;
+        } else {
+            echo "Gagal memproses permintaan: " . $httpCode;
+            exit;
+        }
+    } else {
+        echo "ID tidak ditemukan dalam parameter URL.";
+        exit;
+    }
 } else {
-    echo "Gagal memproses permintaan.";
+    echo "Operasi tidak valid.";
+    exit;
 }
 ?>
