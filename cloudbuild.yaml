@@ -1,11 +1,26 @@
 steps:
+  # Checkout the source code from GitHub
+  - name: "gcr.io/cloud-builders/git"
+    args:
+      [
+        "clone",
+        "https://github.com/Davitsep/final-project-tcc/frontend",
+        "/workspace/source",
+      ]
+
   # Build the Docker image
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/praktikum-tcc-133/my-php-app", "."]
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/$praktikum-tcc-133/my-php-app",
+        "/workspace/source",
+      ]
 
   # Push the Docker image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/praktikum-tcc-133/my-php-app"]
+    args: ["push", "gcr.io/$praktikum-tcc-133/my-php-app"]
 
   # Deploy the image to Cloud Run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -13,6 +28,6 @@ steps:
       - "run"
       - "deploy"
       - "my-php-app"
-      - "--image=gcr.io/praktikum-tcc-133/my-php-app"
+      - "--image=gcr.io/$praktikum-tcc-133/my-php-app"
       - "--platform=managed"
       - "--region=us-central1"
