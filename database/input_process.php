@@ -39,7 +39,7 @@ if ($_GET["op"] == "tambah") {
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if ($httpCode == 201) {
+    if ($httpCode == 200) {
         header("Location: ../inventaris.php");
         exit;
     } else {
