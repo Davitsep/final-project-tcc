@@ -29,7 +29,7 @@ curl_close($ch);
 
 if ($data) {
     // Ambil data pertama dari array
-    $firstData = $data[$id+1];
+    $firstData = $data[$id];
     $kode_barang = $firstData["kode"];
     $nama_barang = $firstData["nama"];
     $jumlah = $firstData["jumlah"];
