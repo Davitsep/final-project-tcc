@@ -1,21 +1,23 @@
-# Menggunakan gambar resmi PHP dengan Apache
+# Menggunakan image PHP 7.4 dengan Apache
 FROM php:7.4-apache
 
-# Menyalin konten proyek ke direktori kerja di dalam kontainer
+# Install apt-utils
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+
+# Menyalin seluruh konten proyek ke direktori /var/www/html di dalam container
 COPY . /var/www/html
 
-# Memperbarui paket yang ada dan menginstal dependensi yang diperlukan
-RUN apt-get update \
-    && apt-get install -y \
-        git \
-        unzip
+# Melakukan update dan menginstall paket yang dibutuhkan (git dan unzip)
+RUN apt-get update && apt-get install -y git unzip
 
-# Menjalankan perintah untuk menginstal dependensi PHP yang diperlukan (misalnya, jika menggunakan Composer)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install --optimize-autoloader --no-dev
+# Menjalankan perintah-perintah setelah proses build container
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Menjalankan perintah untuk menyiapkan konfigurasi Apache
-RUN a2enmod rewrite
+# Mengatur working directory ke /var/www/html di dalam container
+WORKDIR /var/www/html
 
-# Menjalankan Apache ketika kontainer dimulai
-CMD apache2-foreground
+# Mengexpose port 80 (port default Apache)
+EXPOSE 80
+
+# Menjalankan perintah untuk menjalankan server Apache saat container dijalankan
+CMD ["apache2-foreground"]
