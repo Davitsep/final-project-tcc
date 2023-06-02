@@ -51,7 +51,7 @@ router.put("/:id", (req, res) => {
     "UPDATE barang SET kode = ?, nama = ?, jumlah = ?, satuan = ?, kategori = ?, status = ?, harga = ? WHERE id = ?";
   db.query(
     sql,
-    [kode, nama, jumlah, satuan, kategori, status, harga],
+    [id, kode, nama, jumlah, satuan, kategori, status, harga],
     (err, result) => {
       if (err) {
         res.status(500).send({ error: "Terjadi kesalahan server" });
