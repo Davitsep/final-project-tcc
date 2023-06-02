@@ -21,25 +21,36 @@ if (isset($_GET["op"])) {
         if (isset($_GET["id"])) {
             $id = $_GET["id"];
             $url = "https://project-akhir-g2wmaqjniq-uc.a.run.app/barang";
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-$data = json_decode($response, true);
-curl_close($ch);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+            $data = json_decode($response, true);
+            curl_close($ch);
 
-if ($data) {
-    // Ambil data pertama dari array
-    $firstData = $data[$id];
-    $kode_barang = $firstData["kode"];
-    $nama_barang = $firstData["nama"];
-    $jumlah = $firstData["jumlah"];
-    $satuan = $firstData["satuan"];
-    $kategori = $firstData["kategori"];
-    $status = $firstData["status"];
-    $harga = $firstData["harga"];
-} else {
-    echo "Gagal mengambil data dari API.";
-}            
+            if ($data) {
+                $foundData = false;
+
+                // Cek id dari setiap data
+                foreach ($data as $item) {
+                    if ($item["id"] == $id) {
+                        $foundData = true;
+                        $kode_barang = $item["kode"];
+                        $nama_barang = $item["nama"];
+                        $jumlah = $item["jumlah"];
+                        $satuan = $item["satuan"];
+                        $kategori = $item["kategori"];
+                        $status = $item["status"];
+                        $harga = $item["harga"];
+                        break;
+                    }
+                }
+
+                if (!$foundData) {
+                    echo "ID tidak ditemukan dalam data.";
+                }
+            } else {
+                echo "Gagal mengambil data dari API.";
+            }
         } else {
             echo "ID tidak ditemukan dalam parameter URL.";
         }
@@ -48,6 +59,7 @@ if ($data) {
         $judul = "Tambah Data Inventaris";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
