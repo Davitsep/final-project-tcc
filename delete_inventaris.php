@@ -1,11 +1,19 @@
 <?php
-    include "./database/connection.php";
 
-    $kode = $_GET["kode_barang"];
-    $sql = "DELETE FROM inventaris WHERE kode_barang = '$kode'";
+$id = $_GET["id"];
+$url = "https://project-akhir-g2wmaqjniq-uc.a.run.app/barang/$id";
 
-    $result = $connect->query($sql);
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
 
-    if($result) header("Location: ./inventaris.php");
-
+if ($httpCode == 200) {
+    header("Location: ./inventaris.php");
+    exit;
+} else {
+    echo "Gagal menghapus data.";
+}
 ?>

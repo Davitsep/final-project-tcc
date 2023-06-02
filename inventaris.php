@@ -56,7 +56,7 @@ if (!isset($_SESSION['username'])) header("location:index.php");
                         <td><?= "Rp. " . number_format(($data["harga"] * $data["jumlah"]), 0, ',', '.') . ",00" ?></td>
                         <td>
                             <a href="./add_inventaris.php?op=edit&id=<?= $data["id"] ?>"><button type="button" class="btn btn-warning">Edit</button></a>
-                            <a href="./hapus.php?kode_barang=<?= $data["kode"] ?>"><button type="button" class="btn btn-danger ms-1">Delete</button></a>
+                            <a href="./hapus.php?id=<?= $data["id"] ?>"><button type="button" class="btn btn-danger ms-1">Delete</button></a>
                         </td>
                     </tr>
                 <?php

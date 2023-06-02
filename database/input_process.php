@@ -1,5 +1,9 @@
 <?php
-include "./connection.php";
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("location:index.php");
+    exit;
+}
 
 $kode_barang = $_POST["kode_barang"];
 $nama_barang = $_POST["nama_barang"];
@@ -28,7 +32,7 @@ if ($_GET["op"] == "tambah") {
     $response = curl_exec($ch);
     $result = json_decode($response, true);
     curl_close($ch);
-} else {
+} elseif ($_GET["op"] == "edit") {
     $id = $_GET["id"];
     $data = array(
         "kode" => $kode_barang,
@@ -41,17 +45,20 @@ if ($_GET["op"] == "tambah") {
     );
 
     $url = "https://project-akhir-g2wmaqjniq-uc.a.run.app/barang/$id";
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        $response = curl_exec($ch);
-        $result = json_decode($response, true);
-        curl_close($ch);
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    $response = curl_exec($ch);
+    $result = json_decode($response, true);
+    curl_close($ch);
 }
 
 if ($result) {
     header("Location: ../inventaris.php");
+    exit;
+} else {
+    echo "Gagal memproses permintaan.";
 }
 ?>

@@ -20,25 +20,26 @@ if (isset($_GET["op"])) {
         $button = "Ubah";
         if (isset($_GET["id"])) {
             $id = $_GET["id"];
-            $url = "https://project-akhir-g2wmaqjniq-uc.a.run.app/barang/$id";
-            
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $response = curl_exec($ch);
-            $data = json_decode($response, true);
-            curl_close($ch);
-        
-            if ($data) {
-                $kode_barang = $data["kode"];
-                $nama_barang = $data["nama"];
-                $jumlah = $data["jumlah"];
-                $satuan = $data["satuan"];
-                $kategori = $data["kategori"];
-                $status = $data["status"];
-                $harga = $data["harga"];
-            } else {
-                echo "Gagal mengambil data dari API.";
-            }
+            $url = "https://project-akhir-g2wmaqjniq-uc.a.run.app/barang";
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+curl_close($ch);
+
+if ($data) {
+    // Ambil data pertama dari array
+    $firstData = $data[$id-1];
+    $kode_barang = $firstData["kode"];
+    $nama_barang = $firstData["nama"];
+    $jumlah = $firstData["jumlah"];
+    $satuan = $firstData["satuan"];
+    $kategori = $firstData["kategori"];
+    $status = $firstData["status"];
+    $harga = $firstData["harga"];
+} else {
+    echo "Gagal mengambil data dari API.";
+}            
         } else {
             echo "ID tidak ditemukan dalam parameter URL.";
         }
