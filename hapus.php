@@ -1,10 +1,6 @@
 <?php
-include "./database/connection.php";
-
-$kode = $_GET["kode_barang"];
-$sql = "SELECT *FROM inventaris WHERE kode_barang = '$kode'";
-$result = $connect->query($sql);
-$data = $result->fetch_assoc();
+$id = $_GET["id"];
+$nama_barang = $_GET["nama_barang"];
 
 ?>
 
@@ -25,9 +21,9 @@ $data = $result->fetch_assoc();
         <div class="form_add_inventaris_title">
             <h3>Hapus Data Inventaris</h3>
         </div>
-        <h4>Yakin Ingin Menghapus <?php echo $data['nama_barang'] ?> ?</h4>
+        <h4>Yakin Ingin Menghapus <?php echo $nama_barang ?> ?</h4>
         <br>
-        <a href="./delete_inventaris.php?kode_barang=<?= $data["kode_barang"] ?>"><button type="button" class="btn btn-danger">Hapus</button></a>
+        <a href="./delete_inventaris.php?id=<?= $id ?>"><button type="button" class="btn btn-danger">Hapus</button></a>
         <a href="./inventaris.php?"><button type="button" class="btn btn-secondary ms-1">Batal</button></a>
     </div>
 
