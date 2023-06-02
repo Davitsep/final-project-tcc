@@ -1,0 +1,36 @@
+steps:
+  # Langkah 1: Checkout kode sumber dari repositori
+  - name: "gcr.io/cloud-builders/git"
+    args: ["clone", "https://github.com/Davitsep/final-project-tcc.git"]
+
+  # Langkah 2: Bangun kontainer Docker
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "gcr.io/$praktikum-tcc-133/project-akhir"
+      - "final-project-tcc/frontend" # Path ke direktori kode sumber Anda
+
+  # Langkah 3: Unggah kontainer Docker ke Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "gcr.io/$praktikum-tcc-133/project-akhir"
+
+  # Langkah 4: Deploy kontainer ke Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "your-service-name"
+      - "--image"
+      - "gcr.io/praktikum-tcc-133/project-akhir"
+      - "--region"
+      - "us-central1" # Ganti dengan region yang diinginkan
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated" # Hapus baris ini jika memerlukan otentikasi
+
+timeout: "600s" # Ubah sesuai kebutuhan
+
