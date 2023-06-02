@@ -1,23 +1,29 @@
-# Menggunakan PHP sebagai base image
+# Gunakan base image PHP yang diinginkan
 FROM php:7.4-apache
 
-# Menyalin kode proyek ke dalam container
-COPY . /var/www/html
-
-# Mengatur working directory ke direktori proyek
+# Setel direktori kerja ke direktori root aplikasi
 WORKDIR /var/www/html
 
-# Menginstall dependensi yang diperlukan
+# Salin file aplikasi ke dalam kontainer
+COPY . .
+
+# Instal dependensi yang dibutuhkan
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libpq-dev \
-    && docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql
+    git \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
 
-# Mengatur konfigurasi Apache
+# Instal composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install dependensi PHP menggunakan composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Konfigurasi Apache
 RUN a2enmod rewrite
-COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
-# Menjalankan perintah ketika container dijalankan
-CMD apachectl -D FOREGROUND
+# Expose port 80
+EXPOSE 8080
+
+# Setel command yang akan dijalankan saat kontainer berjalan
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
