@@ -8,14 +8,14 @@ steps:
     args:
       - "build"
       - "-t"
-      - "gcr.io/$praktikum-tcc-133/project-akhir"
+      - "gcr.io/praktikum-tcc-133/project-akhir"
       - "final-project-tcc/frontend" # Path ke direktori kode sumber Anda
 
   # Langkah 3: Unggah kontainer Docker ke Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args:
       - "push"
-      - "gcr.io/$praktikum-tcc-133/project-akhir"
+      - "gcr.io/praktikum-tcc-133/project-akhir"
 
   # Langkah 4: Deploy kontainer ke Cloud Run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
