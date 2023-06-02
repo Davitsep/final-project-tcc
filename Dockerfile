@@ -1,23 +1,14 @@
-# Menggunakan image PHP 7.4 dengan Apache
-FROM php:7.4-apache
+# Gunakan image PHP sebagai dasar
+FROM php:latest
 
-# Install apt-utils
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
-
-# Menyalin seluruh konten proyek ke direktori /var/www/html di dalam container
-COPY . /var/www/html
-
-# Melakukan update dan menginstall paket yang dibutuhkan (git dan unzip)
-RUN apt-get update && apt-get install -y git unzip
-
-# Menjalankan perintah-perintah setelah proses build container
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-# Mengatur working directory ke /var/www/html di dalam container
+# Set folder kerja di dalam container
 WORKDIR /var/www/html
 
-# Mengexpose port 80 (port default Apache)
-EXPOSE 8080
+# Salin file-filenya ke folder kerja di dalam container
+COPY . /var/www/html
 
-# Menjalankan perintah untuk menjalankan server Apache saat container dijalankan
-CMD ["apache2-foreground"]
+# Expose port yang digunakan oleh aplikasi PHP
+EXPOSE 80
+
+# Perintah untuk menjalankan server PHP (misalnya Apache)
+CMD ["php", "-S", "0.0.0.0:80"]
